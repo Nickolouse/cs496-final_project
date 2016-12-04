@@ -16,12 +16,24 @@ import org.json.JSONObject;
 import static android.R.attr.value;
 
 public class Add_Location extends AppCompatActivity {
-
+    JSONObject current_route = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         create_location();
-}
+        String s = getIntent().getStringExtra("CURRENT_ROUTE");
+        try {
+            this.current_route = new JSONObject(s);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        EditText name_edit = (EditText) findViewById(R.id.create_name_edit);
+        try {
+            name_edit.setText(this.current_route.get("name").toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
     public void create_location(){
         setContentView(R.layout.activity_assignment4);
         GPSTracker gpsTracker = new GPSTracker(this);
