@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.graphics.Typeface;
 import android.text.Html;
 import android.util.Log;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -37,10 +38,27 @@ public class Assignment4 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d("NME", "view_locations: ");
         getSupportActionBar().hide();
-        view_locations();
+        login();
 
         //asyncTask.execute(String.valueOf(gpsTracker.latitude), String.valueOf(gpsTracker.longitude)); //  asyncTask.execute("Latitude", "Longitude")
 
+    }
+
+    public void login() {
+        setContentView(R.layout.login);
+        Button submit_button;
+        submit_button = (Button) findViewById(R.id.login_submit);
+        submit_button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                CheckBox delete_checkbox = (CheckBox) findViewById(R.id.login_delete_user);
+                if(delete_checkbox.isChecked()){
+
+                }
+                else{
+
+                }
+            }
+        });
     }
 
     public void view_locations() {
