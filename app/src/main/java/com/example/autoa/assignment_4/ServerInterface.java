@@ -35,7 +35,7 @@ public class ServerInterface extends AsyncTask <String,String,String>{
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
         try {
-            URL url = new URL("https://cs-495-1.appspot.com/books/API/addlocation");
+            URL url = new URL("https://cs-495.appspot.com/books/API/addlocation");
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setDoOutput(true);
             // is output buffer writter

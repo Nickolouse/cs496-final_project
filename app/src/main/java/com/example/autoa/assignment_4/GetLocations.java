@@ -36,7 +36,7 @@ public class GetLocations extends AsyncTask<String, Void, String> {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
         try {
-            URL url = new URL("https://cs-495-1.appspot.com/books/API/locations");
+            URL url = new URL("https://cs-495.appspot.com/books/API/locations");
             urlConnection = (HttpURLConnection) url.openConnection();
             Log.d(TAG, "doInBackground: ");
             urlConnection.setRequestMethod("GET");
