@@ -35,11 +35,11 @@ public class ServerInterface extends AsyncTask <String,String,String>{
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
         try {
-            URL url = new URL("https://cs-495.appspot.com/books/API/addlocation");
+            URL url = new URL(params[1]);
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setDoOutput(true);
             // is output buffer writter
-            urlConnection.setRequestMethod("POST");
+            urlConnection.setRequestMethod(params[2]);
             urlConnection.setRequestProperty("Content-Type", "application/json");
             urlConnection.setRequestProperty("Accept", "application/json");
 //set headers and method

@@ -45,6 +45,7 @@ public class Assignment4 extends AppCompatActivity {
 
     TextView cityField, detailsField, currentTemperatureField, humidity_field, pressure_field, weatherIcon, updatedField;
     public String username_ = null;
+    public String response = null;
     JSONArray route_array = null;
     JSONObject current_route = null;
 
@@ -142,7 +143,7 @@ public class Assignment4 extends AppCompatActivity {
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setDoOutput(true);
                 // is output buffer writter
-                urlConnection.setRequestMethod("POST");
+                urlConnection.setRequestMethod(params[2]);
                 urlConnection.setRequestProperty("Content-Type", "application/json");
                 urlConnection.setRequestProperty("Accept", "application/json");
 //set headers and method
@@ -185,11 +186,15 @@ public class Assignment4 extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
+            if(s == null){
+                Assignment4.this.response = null;
+                return;
+            }
             if(s.contains("true")) {
-                Assignment4.this.username_ = s;
+                Assignment4.this.response = s;
             }
             else{
-                Assignment4.this.username_ = null;
+                Assignment4.this.response = null;
             }
         }
     }
@@ -197,9 +202,16 @@ public class Assignment4 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("NME", "view_locations: ");
-        getSupportActionBar().hide();
-        login();
+        if(getIntent().getStringExtra("USERNAME") != null){
+            this.username_ = getIntent().getStringExtra("USERNAME");
+            view_locations();
+        }
+        else{
+
+            Log.d("NME", "view_locations: ");
+            getSupportActionBar().hide();
+            login();
+        }
 
         //asyncTask.execute(String.valueOf(gpsTracker.latitude), String.valueOf(gpsTracker.longitude)); //  asyncTask.execute("Latitude", "Longitude")
 
@@ -226,13 +238,13 @@ public class Assignment4 extends AppCompatActivity {
                 if(create_checkbox.isChecked() && !delete_checkbox.isChecked()){
 
                     try {
-                        new LoginAsync().execute(String.valueOf(post_dict), "https://cs-495.appspot.com/books/API/user").get();
+                        new LoginAsync().execute(String.valueOf(post_dict), "https://cs-495.appspot.com/books/API/user", "POST").get();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } catch (ExecutionException e) {
                         e.printStackTrace();
                     }
-                    if(Assignment4.this.username_ == null){
+                    if(Assignment4.this.response == null){
                         Log.d("NME", "no username");
                     }
                     else {
@@ -241,13 +253,32 @@ public class Assignment4 extends AppCompatActivity {
                         Assignment4.this.view_locations();
                     }
                 }
-                else if(delete_checkbox.isChecked()){
+                else if(delete_checkbox.isChecked() && !create_checkbox.isChecked()){
+                    try {
+                        new LoginAsync().execute(String.valueOf(post_dict), "https://cs-495.appspot.com/books/API/users", "DELETE").get();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
 
+                    if(Assignment4.this.response == null){
+                        Log.d("NME", "no username");
+                    }
+                    else {
+                        Assignment4.this.login();
+                    }
                 }
                 else{
-                    new LoginAsync().execute(String.valueOf(post_dict), "https://cs-495.appspot.com/books/API/login");
+                    try {
+                        new LoginAsync().execute(String.valueOf(post_dict), "https://cs-495.appspot.com/books/API/login", "POST").get();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
 
-                    if(Assignment4.this.username_ == null){
+                    if(Assignment4.this.response == null){
                         Log.d("NME", "no username");
                     }
                     else {
@@ -299,6 +330,7 @@ public class Assignment4 extends AppCompatActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
+                            intent.putExtra("USERNAME", Assignment4.this.username_);
                             startActivity(intent);
                         }
                     });/****/
@@ -331,9 +363,10 @@ public class Assignment4 extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent(getApplicationContext(), Add_Location.class);
+                intent.putExtra("USERNAME", Assignment4.this.username_);
                 startActivity(intent);
             }
-        });/****/
+        });
     }
 
 }
